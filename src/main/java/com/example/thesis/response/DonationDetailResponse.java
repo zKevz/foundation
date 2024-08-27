@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 public class DonationDetailResponse {
+  private Integer id;
   private String name;
   private String imageUrl;
   private String description;

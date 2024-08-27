@@ -30,4 +30,7 @@ public class DonationAllocated extends BaseModel {
 
   @Column
   private Integer amount;
+
+  @Column
+  private PaymentType paymentType;
 }

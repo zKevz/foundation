@@ -55,6 +55,7 @@ public class DonationService implements IDonationService {
 
     return DonationHeaderResponse
       .builder()
+      .id(donationActivity.getId())
       .name(donationActivity.getName())
       .amount(donationAllocationService.calculateAllocationAmountSum(donationActivity))
       .imageUrl(donationActivity.getImageUrl())
@@ -69,6 +70,7 @@ public class DonationService implements IDonationService {
 
     return DonationDetailResponse
       .builder()
+      .id(donationActivity.getId())
       .name(donationActivity.getName())
       .amount(donationAllocationService.calculateAllocationAmountSum(donationActivity))
       .imageUrl(donationActivity.getImageUrl())
@@ -108,7 +110,7 @@ public class DonationService implements IDonationService {
       .disasterDescription(createDonationRequest.getDescription())
       .foundation(foundationService.findById(foundationId))
       .status(DonationStatus.OPEN)
-      .endDate(createDonationRequest.getEndDate())
+      .endDate(new Date(createDonationRequest.getEndDateUnixTimestamp() * 1000))
       .shipmentStatus(DonationShipmentStatus.NOT_DELIVERED)
       .build();
     donationRepository.save(donationActivity);
@@ -135,7 +137,8 @@ public class DonationService implements IDonationService {
   @Override
   public DonationAllocationDetailResponse getAllocationDetail(Integer donationId) {
     DonationActivity donationActivity = findById(donationId);
-    List<DonationAllocation> donationAllocations = donationAllocationRepository.findByDonationActivity(donationActivity);
+    List<DonationAllocation> donationAllocations =
+      donationAllocationRepository.findByDonationActivity(donationActivity);
     List<DonationAllocationDetailResponse.DonationAllocationDetailItemResponse> donationAllocationItems =
       donationAllocations
         .stream()

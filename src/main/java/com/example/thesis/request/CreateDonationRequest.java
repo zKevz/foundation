@@ -10,7 +10,7 @@ public class CreateDonationRequest {
   private String name;
   private String imageUrl;
   private String description;
-  private Date endDate;
+  private Long endDateUnixTimestamp;
   private List<DonationAllocationItem> allocation;
 
   @Data
