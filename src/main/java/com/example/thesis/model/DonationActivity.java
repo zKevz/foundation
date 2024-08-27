@@ -32,6 +32,9 @@ public class DonationActivity extends BaseModel {
   private String imageUrl;
 
   @Column
+  private String imageProofUrl;
+
+  @Column
   private String disasterName; // lol..
 
   @Column

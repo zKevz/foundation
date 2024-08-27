@@ -44,9 +44,10 @@ public class DonationService implements IDonationService {
   @Autowired
   private IDonationAllocationService donationAllocationService;
 
-  private Long getRemainingDonationDays(Date endDate) {
+  @Override
+  public Long getRemainingDonationDays(DonationActivity donationActivity) {
     LocalDate localDate = LocalDate.now();
-    LocalDate localEndDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    LocalDate localEndDate = donationActivity.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     return ChronoUnit.DAYS.between(localDate, localEndDate);
   }
 
@@ -59,7 +60,7 @@ public class DonationService implements IDonationService {
       .name(donationActivity.getName())
       .amount(donationAllocationService.calculateAllocationAmountSum(donationActivity))
       .imageUrl(donationActivity.getImageUrl())
-      .remainingDays(getRemainingDonationDays(donationActivity.getEndDate()))
+      .remainingDays(getRemainingDonationDays(donationActivity))
       .foundationName(foundation.getUser().getName())
       .allocatedAmount(donationAllocatedService.calculateAllocatedAmountSum(donationActivity))
       .build();
@@ -75,7 +76,7 @@ public class DonationService implements IDonationService {
       .amount(donationAllocationService.calculateAllocationAmountSum(donationActivity))
       .imageUrl(donationActivity.getImageUrl())
       .description(donationActivity.getDisasterDescription())
-      .remainingDays(getRemainingDonationDays(donationActivity.getEndDate()))
+      .remainingDays(getRemainingDonationDays(donationActivity))
       .foundationName(foundation.getUser().getName())
       .allocatedAmount(donationAllocatedService.calculateAllocatedAmountSum(donationActivity))
       .build();
@@ -152,7 +153,7 @@ public class DonationService implements IDonationService {
     return DonationAllocationDetailResponse
       .builder()
       .items(donationAllocationItems)
-      .remainingDays(getRemainingDonationDays(donationActivity.getEndDate()))
+      .remainingDays(getRemainingDonationDays(donationActivity))
       .build();
   }
 

@@ -11,4 +11,5 @@ public interface DonationAllocatedRepository extends JpaRepository<DonationAlloc
   List<DonationAllocated> findByDonationActivity(DonationActivity donationActivity);
 
   List<DonationAllocated> findByUser(User user);
+  DonationAllocated findByUserAndId(User user, Integer id);
 }

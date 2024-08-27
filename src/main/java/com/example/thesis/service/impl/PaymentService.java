@@ -2,6 +2,7 @@ package com.example.thesis.service.impl;
 
 import com.example.thesis.model.DonationActivity;
 import com.example.thesis.model.DonationAllocated;
+import com.example.thesis.model.DonationAllocatedStatus;
 import com.example.thesis.model.PaymentType;
 import com.example.thesis.model.User;
 import com.example.thesis.repository.DonationAllocatedRepository;
@@ -40,6 +41,7 @@ public class PaymentService implements IPaymentService {
       .donationActivity(donationActivity)
       .amount(donationPayRequest.getAmount())
       .paymentType(PaymentType.valueOf(donationPayRequest.getPaymentType()))
+      .status(DonationAllocatedStatus.SUCCESS)
       .build();
     donationAllocatedRepository.save(donationAllocated);
   }

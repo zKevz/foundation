@@ -4,6 +4,7 @@ import com.example.thesis.model.DonationActivity;
 import com.example.thesis.model.DonationAllocated;
 import com.example.thesis.model.User;
 import com.example.thesis.repository.DonationAllocatedRepository;
+import com.example.thesis.response.DonationAllocatedDetailResponse;
 import com.example.thesis.response.DonationAllocatedHeaderResponse;
 import com.example.thesis.service.IDonationAllocatedService;
 import com.example.thesis.service.IDonationService;
@@ -48,5 +49,22 @@ public class DonationAllocatedService implements IDonationAllocatedService {
   public List<DonationAllocatedHeaderResponse> getAllDonationAllocatedHeaders(User user) {
     List<DonationAllocated> donationAllocatedList = donationAllocatedRepository.findByUser(user);
     return donationAllocatedList.stream().map(this::mapDonationAllocatedToHeaderResponse).collect(Collectors.toList());
+  }
+
+  @Override
+  public DonationAllocatedDetailResponse getDonationAllocatedDetail(Integer donationAllocatedId, User user) {
+    DonationAllocated donationAllocated = donationAllocatedRepository.findByUserAndId(user, donationAllocatedId);
+    return DonationAllocatedDetailResponse
+      .builder()
+      .date(donationAllocated.getCreatedDate())
+      .id(donationAllocated.getId())
+      .amount(donationAllocated.getAmount())
+      .remainingDays(donationService.getRemainingDonationDays(donationAllocated.getDonationActivity()))
+      .name(donationAllocated.getDonationActivity().getName())
+      .foundationName(donationAllocated.getDonationActivity().getFoundation().getUser().getName())
+      .proofImageUrl(donationAllocated.getDonationActivity().getImageProofUrl())
+      .donationStatus(donationAllocated.getStatus())
+      .donationShipmentStatus(donationAllocated.getDonationActivity().getShipmentStatus())
+      .build();
   }
 }

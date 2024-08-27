@@ -14,6 +14,7 @@ public interface IDonationService {
   List<DonationHeaderResponse> getAll();
 
   void create(Integer foundationId, CreateDonationRequest createDonationRequest);
+  Long getRemainingDonationDays(DonationActivity donationActivity);
 
   DonationActivity findById(Integer donationId);
   DonationDetailResponse getDetail(Integer donationId);
