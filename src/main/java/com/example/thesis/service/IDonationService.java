@@ -20,4 +20,6 @@ public interface IDonationService {
   DonationDetailResponse getDetail(Integer donationId);
 
   DonationAllocationDetailResponse getAllocationDetail(Integer donationId);
+
+  void uploadProofImageUrl(Integer donationId, String url);
 }

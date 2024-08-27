@@ -158,6 +158,13 @@ public class DonationService implements IDonationService {
   }
 
   @Override
+  @Transactional
+  public void uploadProofImageUrl(Integer donationId, String url) {
+    DonationActivity donationActivity = findById(donationId);
+    donationActivity.setImageProofUrl(url);
+  }
+
+  @Override
   public DonationActivity findById(Integer donationId) {
     return donationRepository
       .findById(donationId)

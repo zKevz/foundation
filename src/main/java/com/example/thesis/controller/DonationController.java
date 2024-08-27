@@ -1,6 +1,7 @@
 package com.example.thesis.controller;
 
 import com.example.thesis.request.CreateDonationRequest;
+import com.example.thesis.request.UploadProofImageUrlRequest;
 import com.example.thesis.response.BaseResponse;
 import com.example.thesis.response.DonationAllocationDetailResponse;
 import com.example.thesis.response.DonationDetailResponse;
@@ -70,6 +71,18 @@ public class DonationController {
   public BaseResponse<DonationAllocationDetailResponse> getAllocationDetail(@PathVariable Integer donationId) {
     try {
       return BaseResponse.ok(donationService.getAllocationDetail(donationId));
+    } catch (Exception e) {
+      log.info("Get newest donations error: {}", e.getMessage(), e);
+      return BaseResponse.error(e.getMessage());
+    }
+  }
+
+  @PostMapping("/{donationId}/_upload-proof")
+  public BaseResponse<Object> uploadProofImageUrl(@PathVariable Integer donationId,
+    @RequestBody UploadProofImageUrlRequest uploadProofImageUrlRequest) {
+    try {
+      donationService.uploadProofImageUrl(donationId, uploadProofImageUrlRequest.getUrl());
+      return BaseResponse.ok(null);
     } catch (Exception e) {
       log.info("Get newest donations error: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
