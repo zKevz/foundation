@@ -26,7 +26,7 @@ public class PaymentController {
     return BaseResponse.ok(paymentService.getPaymentTypes());
   }
 
-  @PostMapping("/{donationId}")
+  @PostMapping("/{donationId}/_pay")
   public BaseResponse<Object> pay(@AuthenticationPrincipal User user,
     @PathVariable Integer donationId,
     @RequestBody DonationPayRequest donationPayRequest) {
