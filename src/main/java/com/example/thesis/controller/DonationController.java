@@ -9,6 +9,7 @@ import com.example.thesis.response.DonationHeaderResponse;
 import com.example.thesis.service.IDonationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ public class DonationController {
   private IDonationService donationService;
 
   @GetMapping("/newest")
+  @PreAuthorize("hasRole('USER')")
   public BaseResponse<List<DonationHeaderResponse>> getNewestDonations() {
     try {
       return BaseResponse.ok(donationService.getNewestDonations());
@@ -36,6 +38,7 @@ public class DonationController {
   }
 
   @GetMapping
+  @PreAuthorize("hasRole('USER')")
   public BaseResponse<List<DonationHeaderResponse>> getAllDonations() {
     try {
       return BaseResponse.ok(donationService.getAll());
@@ -46,6 +49,7 @@ public class DonationController {
   }
 
   @PostMapping("/{foundationId}")
+  @PreAuthorize("hasRole('FOUNDATION')")
   public BaseResponse<Object> createDonation(@PathVariable Integer foundationId,
     @RequestBody CreateDonationRequest createDonationRequest) {
     try {
@@ -58,6 +62,7 @@ public class DonationController {
   }
 
   @GetMapping("/{donationId}")
+  @PreAuthorize("hasRole('USER')")
   public BaseResponse<DonationDetailResponse> getDetail(@PathVariable Integer donationId) {
     try {
       return BaseResponse.ok(donationService.getDetail(donationId));
@@ -68,6 +73,7 @@ public class DonationController {
   }
 
   @GetMapping("/{donationId}/allocation")
+  @PreAuthorize("hasRole('USER')")
   public BaseResponse<DonationAllocationDetailResponse> getAllocationDetail(@PathVariable Integer donationId) {
     try {
       return BaseResponse.ok(donationService.getAllocationDetail(donationId));
@@ -78,6 +84,7 @@ public class DonationController {
   }
 
   @PostMapping("/{donationId}/_upload-proof")
+  @PreAuthorize("hasRole('FOUNDATION')")
   public BaseResponse<Object> uploadProofImageUrl(@PathVariable Integer donationId,
     @RequestBody UploadProofImageUrlRequest uploadProofImageUrlRequest) {
     try {

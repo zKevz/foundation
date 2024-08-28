@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@Slf4j
 public class UserService implements IUserService {
   @Autowired
   private UserRepository userRepository;
@@ -116,10 +115,6 @@ public class UserService implements IUserService {
 
     saveToken(user, jwtToken);
 
-    log.error("Successfully registered user: {} {}",
-      registerUserRequest.getUsername().trim(),
-      registerUserRequest.getEmail().trim());
-
     return ValidateUserResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).userId(user.getId()).build();
   }
 
@@ -150,8 +145,6 @@ public class UserService implements IUserService {
 
     saveToken(user, jwtToken);
 
-    log.error("Validate user: {}", validateUserRequest.getEmail());
-
     return ValidateUserResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).userId(user.getId()).build();
   }
 
@@ -165,5 +158,10 @@ public class UserService implements IUserService {
   public void changeUserRole(Integer userId, UserRole userRole) {
     User user = findById(userId);
     user.setRole(userRole);
+  }
+
+  @Override
+  public boolean containsRole(UserRole userRole) {
+    return userRepository.existsByRole(userRole);
   }
 }

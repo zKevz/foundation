@@ -13,4 +13,6 @@ public interface IUserService {
   User findById(Integer userId);
 
   void changeUserRole(Integer userId, UserRole userRole);
+
+  boolean containsRole(UserRole userRole);
 }
