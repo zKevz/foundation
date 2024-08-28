@@ -1,6 +1,7 @@
 package com.example.thesis.controller;
 
 import com.example.thesis.request.CreateDonationRequest;
+import com.example.thesis.request.EditDonationRequest;
 import com.example.thesis.request.UploadProofImageUrlRequest;
 import com.example.thesis.response.BaseResponse;
 import com.example.thesis.response.DonationAllocationDetailResponse;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,15 +85,15 @@ public class DonationController {
     }
   }
 
-  @PostMapping("/{donationId}/_upload-proof")
+  @PutMapping("/{donationId}")
   @PreAuthorize("hasRole('FOUNDATION')")
-  public BaseResponse<Object> uploadProofImageUrl(@PathVariable Integer donationId,
-    @RequestBody UploadProofImageUrlRequest uploadProofImageUrlRequest) {
+  public BaseResponse<Object> editDonation(@PathVariable Integer donationId,
+    @RequestBody EditDonationRequest editDonationRequest) {
     try {
-      donationService.uploadProofImageUrl(donationId, uploadProofImageUrlRequest.getUrl());
+      donationService.editDonation(donationId, editDonationRequest);
       return BaseResponse.ok(null);
     } catch (Exception e) {
-      log.error("Get newest donations error: {}", e.getMessage(), e);
+      log.error("Edit donation error: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }

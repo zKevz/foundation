@@ -20,4 +20,10 @@ public class DonationAllocationService implements IDonationAllocationService {
       .map(DonationAllocation::getAmount)
       .reduce(0, Integer::sum);
   }
+
+  @Override
+  public DonationAllocation findById(Integer allocationId) {
+    return donationAllocationRepository.findById(allocationId)
+      .orElseThrow(() -> new RuntimeException("Cannot find donation allocation with id " + allocationId));
+  }
 }

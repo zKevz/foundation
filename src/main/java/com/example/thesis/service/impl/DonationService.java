@@ -8,6 +8,7 @@ import com.example.thesis.model.Foundation;
 import com.example.thesis.repository.DonationAllocationRepository;
 import com.example.thesis.repository.DonationRepository;
 import com.example.thesis.request.CreateDonationRequest;
+import com.example.thesis.request.EditDonationRequest;
 import com.example.thesis.response.DonationAllocationDetailResponse;
 import com.example.thesis.response.DonationDetailResponse;
 import com.example.thesis.response.DonationHeaderResponse;
@@ -16,7 +17,6 @@ import com.example.thesis.service.IDonationAllocationService;
 import com.example.thesis.service.IDonationService;
 import com.example.thesis.service.IFoundationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +25,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -154,15 +155,54 @@ public class DonationService implements IDonationService {
     return DonationAllocationDetailResponse
       .builder()
       .items(donationAllocationItems)
+      .total(donationAllocatedService.calculateAllocatedAmountSum(donationActivity))
       .remainingDays(getRemainingDonationDays(donationActivity))
       .build();
   }
 
   @Override
   @Transactional
-  public void uploadProofImageUrl(Integer donationId, String url) {
+  public void editDonation(Integer donationId, EditDonationRequest editDonationRequest) {
     DonationActivity donationActivity = findById(donationId);
-    donationActivity.setImageProofUrl(url);
+    if (Objects.nonNull(editDonationRequest.getName())) {
+      donationActivity.setName(editDonationRequest.getName());
+    }
+
+    if (Objects.nonNull(editDonationRequest.getEndDate())) {
+      donationActivity.setEndDate(editDonationRequest.getEndDate());
+    }
+
+    if (Objects.nonNull(editDonationRequest.getImageUrl())) {
+      donationActivity.setImageUrl(editDonationRequest.getImageUrl());
+    }
+
+    if (Objects.nonNull(editDonationRequest.getImageProofUrl())) {
+      donationActivity.setImageProofUrl(editDonationRequest.getImageProofUrl());
+    }
+
+    if (Objects.nonNull(editDonationRequest.getDisasterName())) {
+      donationActivity.setDisasterName(editDonationRequest.getDisasterName());
+    }
+
+    if (Objects.nonNull(editDonationRequest.getDisasterDescription())) {
+      donationActivity.setDisasterDescription(editDonationRequest.getDisasterDescription());
+    }
+
+    if (Objects.nonNull(editDonationRequest.getStatus())) {
+      donationActivity.setStatus(editDonationRequest.getStatus());
+    }
+
+    if (Objects.nonNull(editDonationRequest.getShipmentStatus())) {
+      donationActivity.setShipmentStatus(editDonationRequest.getShipmentStatus());
+    }
+
+    if (Objects.nonNull(editDonationRequest.getAllocation())) {
+      for (EditDonationRequest.DonationAllocationItem donationAllocationItem : editDonationRequest.getAllocation()) {
+        DonationAllocation donationAllocation = donationAllocationService.findById(donationAllocationItem.getId());
+        donationAllocation.setAmount(donationAllocationItem.getAmount());
+        donationAllocation.setDescription(donationAllocationItem.getDescription());
+      }
+    }
   }
 
   @Override

@@ -1,5 +1,6 @@
 package com.example.thesis.service;
 
+import com.example.thesis.model.User;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,4 +20,5 @@ public interface IJwtService {
 
   boolean isTokenValid(String token, UserDetails userDetails);
   String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration);
+  void expireOrRevokeTokenByUser(User user);
 }

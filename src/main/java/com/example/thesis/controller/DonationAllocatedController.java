@@ -7,7 +7,6 @@ import com.example.thesis.response.DonationAllocatedHeaderResponse;
 import com.example.thesis.service.IDonationAllocatedService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,20 +23,10 @@ public class DonationAllocatedController {
   @Autowired
   private IDonationAllocatedService donationAllocatedService;
 
-  @Autowired
-  private ApplicationContext applicationContext;
-
   @GetMapping
   @PreAuthorize("hasRole('USER') or hasRole('FOUNDATION')")
   public BaseResponse<List<DonationAllocatedHeaderResponse>> getAllDonationAllocatedHeaders(
     @AuthenticationPrincipal User user) {
-    String[] beanNames = applicationContext.getBeanDefinitionNames();
-    for (String beanName : beanNames) {
-
-      System.out.println(beanName + " : " + applicationContext.getBean(beanName).getClass().toString());
-      System.out.println();
-    }
-
     try {
       return BaseResponse.ok(donationAllocatedService.getAllDonationAllocatedHeaders(user));
     } catch (Exception e) {

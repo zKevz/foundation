@@ -2,6 +2,7 @@ package com.example.thesis.service;
 
 import com.example.thesis.model.DonationActivity;
 import com.example.thesis.request.CreateDonationRequest;
+import com.example.thesis.request.EditDonationRequest;
 import com.example.thesis.response.DonationAllocationDetailResponse;
 import com.example.thesis.response.DonationDetailResponse;
 import com.example.thesis.response.DonationHeaderResponse;
@@ -21,5 +22,5 @@ public interface IDonationService {
 
   DonationAllocationDetailResponse getAllocationDetail(Integer donationId);
 
-  void uploadProofImageUrl(Integer donationId, String url);
+  void editDonation(Integer donationId, EditDonationRequest editDonationRequest);
 }

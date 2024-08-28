@@ -10,6 +10,7 @@ import java.util.List;
 public class DonationAllocationDetailResponse {
   private List<DonationAllocationDetailItemResponse> items;
   private Long remainingDays;
+  private Integer total;
 
   @Data
   @SuperBuilder

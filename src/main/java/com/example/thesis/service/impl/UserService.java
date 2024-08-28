@@ -5,12 +5,12 @@ import com.example.thesis.model.User;
 import com.example.thesis.model.UserRole;
 import com.example.thesis.repository.TokenRepository;
 import com.example.thesis.repository.UserRepository;
+import com.example.thesis.request.EditUserRequest;
 import com.example.thesis.request.RegisterUserRequest;
 import com.example.thesis.request.ValidateUserRequest;
 import com.example.thesis.response.ValidateUserResponse;
 import com.example.thesis.service.IJwtService;
 import com.example.thesis.service.IUserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -96,10 +96,7 @@ public class UserService implements IUserService {
   @Override
   @Transactional
   public ValidateUserResponse registerUser(RegisterUserRequest registerUserRequest) {
-    if (!isValidUsername(registerUserRequest.getUsername())) {
-      throw new RuntimeException("Username must be between 3 to 17 characters");
-    }
-
+    validateUsername(registerUserRequest.getUsername());
     validateEmailPassword(registerUserRequest.getEmail(), registerUserRequest.getPassword());
 
     User user = userRepository.save(User
@@ -116,6 +113,12 @@ public class UserService implements IUserService {
     saveToken(user, jwtToken);
 
     return ValidateUserResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).userId(user.getId()).build();
+  }
+
+  private void validateUsername(String username) {
+    if (!isValidUsername(username)) {
+      throw new RuntimeException("Username must be between 3 to 17 characters");
+    }
   }
 
   private void saveToken(User user, String jwtToken) {
@@ -137,11 +140,27 @@ public class UserService implements IUserService {
     String jwtToken = jwtService.generateToken(user);
     String refreshToken = jwtService.generateRefreshToken(user);
 
-    List<Token> validTokenList = tokenRepository.findByUserIdAndRevokedFalseAndExpiredFalse(user.getId());
-    for (Token token : validTokenList) {
-      token.setExpired(true);
-      token.setRevoked(true);
-    }
+    jwtService.expireOrRevokeTokenByUser(user);
+
+    saveToken(user, jwtToken);
+
+    return ValidateUserResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).userId(user.getId()).build();
+  }
+
+  @Override
+  @Transactional
+  public ValidateUserResponse editUser(User user, EditUserRequest editUserRequest) {
+    validateUsername(editUserRequest.getUsername());
+    validateEmailPassword(editUserRequest.getEmail(), editUserRequest.getPassword());
+
+    user.setEmail(editUserRequest.getEmail());
+    user.setName(editUserRequest.getUsername());
+    user.setPassword(editUserRequest.getPassword());
+
+    String jwtToken = jwtService.generateToken(user);
+    String refreshToken = jwtService.generateRefreshToken(user);
+
+    jwtService.expireOrRevokeTokenByUser(user);
 
     saveToken(user, jwtToken);
 

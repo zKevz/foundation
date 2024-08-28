@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface IDonationAllocationService {
   Integer calculateAllocationAmountSum(DonationActivity donationActivity);
+
+  DonationAllocation findById(Integer allocationId);
 }
