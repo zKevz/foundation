@@ -30,7 +30,7 @@ public class DonationController {
     try {
       return BaseResponse.ok(donationService.getNewestDonations());
     } catch (Exception e) {
-      log.info("Get newest donations error: {}", e.getMessage(), e);
+      log.error("Get newest donations error: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }
@@ -40,7 +40,7 @@ public class DonationController {
     try {
       return BaseResponse.ok(donationService.getAll());
     } catch (Exception e) {
-      log.info("Get all donations error: {}", e.getMessage(), e);
+      log.error("Get all donations error: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }
@@ -52,7 +52,7 @@ public class DonationController {
       donationService.create(foundationId, createDonationRequest);
       return BaseResponse.ok(null);
     } catch (Exception e) {
-      log.info("Create donation error: {}", e.getMessage(), e);
+      log.error("Create donation error: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }
@@ -62,7 +62,7 @@ public class DonationController {
     try {
       return BaseResponse.ok(donationService.getDetail(donationId));
     } catch (Exception e) {
-      log.info("Get newest donations error: {}", e.getMessage(), e);
+      log.error("Get newest donations error: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }
@@ -72,7 +72,7 @@ public class DonationController {
     try {
       return BaseResponse.ok(donationService.getAllocationDetail(donationId));
     } catch (Exception e) {
-      log.info("Get newest donations error: {}", e.getMessage(), e);
+      log.error("Get newest donations error: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }
@@ -84,7 +84,7 @@ public class DonationController {
       donationService.uploadProofImageUrl(donationId, uploadProofImageUrlRequest.getUrl());
       return BaseResponse.ok(null);
     } catch (Exception e) {
-      log.info("Get newest donations error: {}", e.getMessage(), e);
+      log.error("Get newest donations error: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }

@@ -27,7 +27,7 @@ public class FoundationController {
     try {
       return BaseResponse.ok(foundationService.createFoundation(userId, createFoundationRequest));
     } catch (Exception e) {
-      log.info("Create foundation error: {}", e.getMessage(), e);
+      log.error("Create foundation error: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }

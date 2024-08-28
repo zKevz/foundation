@@ -26,7 +26,7 @@ public class UserController {
     try {
       return BaseResponse.ok(userService.registerUser(registerUserRequest));
     } catch (Exception e) {
-      log.info("Register user failed: {}", e.getMessage(), e);
+      log.error("Register user failed: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }
@@ -36,7 +36,7 @@ public class UserController {
     try {
       return BaseResponse.ok(userService.validateUser(validateUserRequest));
     } catch (Exception e) {
-      log.info("Register user failed: {}", e.getMessage(), e);
+      log.error("Register user failed: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }

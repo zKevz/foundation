@@ -53,7 +53,11 @@ public class DonationAllocatedService implements IDonationAllocatedService {
 
   @Override
   public DonationAllocatedDetailResponse getDonationAllocatedDetail(Integer donationAllocatedId, User user) {
-    DonationAllocated donationAllocated = donationAllocatedRepository.findByUserAndId(user, donationAllocatedId);
+    DonationAllocated donationAllocated = donationAllocatedRepository
+      .findByUserAndId(user, donationAllocatedId)
+      .orElseThrow(() -> new RuntimeException(
+        "Cannot find donation allocated by id " + donationAllocatedId + " and user id " + user.getId()));
+
     return DonationAllocatedDetailResponse
       .builder()
       .date(donationAllocated.getCreatedDate())
@@ -66,5 +70,13 @@ public class DonationAllocatedService implements IDonationAllocatedService {
       .donationStatus(donationAllocated.getStatus())
       .donationShipmentStatus(donationAllocated.getDonationActivity().getShipmentStatus())
       .build();
+  }
+
+  @Override
+  public DonationAllocated findById(Integer donationAllocatedId) {
+    return donationAllocatedRepository
+      .findById(donationAllocatedId)
+      .orElseThrow(() -> new RuntimeException(
+        "Cannot find donation allocated by ID of " + donationAllocatedId)); // i suck :(
   }
 }

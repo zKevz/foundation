@@ -116,7 +116,7 @@ public class UserService implements IUserService {
 
     saveToken(user, jwtToken);
 
-    log.info("Successfully registered user: {} {}",
+    log.error("Successfully registered user: {} {}",
       registerUserRequest.getUsername().trim(),
       registerUserRequest.getEmail().trim());
 
@@ -150,7 +150,7 @@ public class UserService implements IUserService {
 
     saveToken(user, jwtToken);
 
-    log.info("Validate user: {}", validateUserRequest.getEmail());
+    log.error("Validate user: {}", validateUserRequest.getEmail());
 
     return ValidateUserResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).userId(user.getId()).build();
   }
