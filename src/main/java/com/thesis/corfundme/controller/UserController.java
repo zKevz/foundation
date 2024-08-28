@@ -10,7 +10,6 @@ import com.thesis.corfundme.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,8 +46,8 @@ public class UserController {
   }
 
   @PutMapping("/edit")
-  public BaseResponse<ValidateUserResponse> editUser(@AuthenticationPrincipal User user, @Valid @RequestBody
-  EditUserRequest editUserRequest) {
+  public BaseResponse<ValidateUserResponse> editUser(@AuthenticationPrincipal User user,
+    @Valid @RequestBody EditUserRequest editUserRequest) {
     try {
       return BaseResponse.ok(userService.editUser(user, editUserRequest));
     } catch (Exception e) {

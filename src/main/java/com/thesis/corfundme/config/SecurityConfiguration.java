@@ -29,10 +29,12 @@ public class SecurityConfiguration {
     http
       .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(req -> req
+        // Require authorization for /api/v1/users/edit
+        .requestMatchers("/api/v1/users/edit")
+        .authenticated()
         .requestMatchers(
           "/v2/api-docs",
-          "/api/v1/users/register",
-          "/api/v1/users/login",
+          "/api/v1/users/**",
           "/v3/api-docs",
           "/v3/api-docs/**",
           "/swagger-resources",

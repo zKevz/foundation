@@ -148,13 +148,17 @@ public class UserService implements IUserService {
 
   @Override
   @Transactional
-  public ValidateUserResponse editUser(User user, EditUserRequest editUserRequest) {
+  public ValidateUserResponse editUser(User userDetails, EditUserRequest editUserRequest) {
     validateUsername(editUserRequest.getUsername());
     validateEmailPassword(editUserRequest.getEmail(), editUserRequest.getPassword());
 
+    User user = findById(userDetails.getId());
     user.setEmail(editUserRequest.getEmail());
     user.setName(editUserRequest.getUsername());
-    user.setPassword(editUserRequest.getPassword());
+    user.setPassword(passwordEncoder.encode(editUserRequest.getPassword()));
+    userDetails.setEmail(editUserRequest.getEmail());
+    userDetails.setName(editUserRequest.getUsername());
+    userDetails.setPassword(passwordEncoder.encode(editUserRequest.getPassword()));
 
     String jwtToken = jwtService.generateToken(user);
     String refreshToken = jwtService.generateRefreshToken(user);
