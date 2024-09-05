@@ -81,6 +81,7 @@ public class DonationService implements IDonationService {
       .remainingDays(getRemainingDonationDays(donationActivity))
       .foundationName(foundation.getUser().getName())
       .allocatedAmount(donationAllocatedService.calculateAllocatedAmountSum(donationActivity))
+      .dateArrived(donationActivity.getArrivedDate())
       .build();
   }
 
@@ -202,6 +203,10 @@ public class DonationService implements IDonationService {
         donationAllocation.setAmount(donationAllocationItem.getAmount());
         donationAllocation.setDescription(donationAllocationItem.getDescription());
       }
+    }
+
+    if (Objects.nonNull(editDonationRequest.getArrivedDate())) {
+      donationActivity.setArrivedDate(editDonationRequest.getArrivedDate());
     }
   }
 

@@ -29,6 +29,9 @@ public class DonationActivity extends BaseModel {
   private Date endDate;
 
   @Column
+  private Date arrivedDate;
+
+  @Column
   private String imageUrl;
 
   @Column
