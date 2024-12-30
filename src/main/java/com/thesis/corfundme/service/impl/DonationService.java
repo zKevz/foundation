@@ -62,7 +62,6 @@ public class DonationService implements IDonationService {
       .name(donationActivity.getName())
       .amount(donationAllocationService.calculateAllocationAmountSum(donationActivity))
       .imageUrl(donationActivity.getImageUrl())
-      .disasterName(donationActivity.getDisasterName())
       .remainingDays(getRemainingDonationDays(donationActivity))
       .foundationName(foundation.getUser().getName())
       .allocatedAmount(donationAllocatedService.calculateAllocatedAmountSum(donationActivity))
@@ -111,7 +110,6 @@ public class DonationService implements IDonationService {
       .builder()
       .name(createDonationRequest.getName())
       .imageUrl(createDonationRequest.getImageUrl())
-      .disasterName(createDonationRequest.getName())
       .disasterDescription(createDonationRequest.getDescription())
       .foundation(foundationService.findById(foundationId))
       .status(DonationStatus.OPEN)
@@ -180,10 +178,6 @@ public class DonationService implements IDonationService {
 
     if (Objects.nonNull(editDonationRequest.getImageProofUrl())) {
       donationActivity.setImageProofUrl(editDonationRequest.getImageProofUrl());
-    }
-
-    if (Objects.nonNull(editDonationRequest.getDisasterName())) {
-      donationActivity.setDisasterName(editDonationRequest.getDisasterName());
     }
 
     if (Objects.nonNull(editDonationRequest.getDisasterDescription())) {

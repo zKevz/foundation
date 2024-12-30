@@ -41,9 +41,6 @@ public class DonationActivity extends BaseModel {
   private String imageProofUrl;
 
   @Column
-  private String disasterName; // lol..
-
-  @Column
   private String disasterDescription;
 
   @ManyToOne(fetch = FetchType.LAZY)
