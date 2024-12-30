@@ -46,9 +46,10 @@ public class RefundService implements IRefundService {
 
   @Override
   @Transactional
-  public void rejectRefund(Integer refundId) {
+  public void rejectRefund(Integer refundId, String reason) {
     Refund refund = findById(refundId);
     refund.setStatus(RefundStatus.REJECTED);
+    refund.setRejectReason(reason);
   }
 
   private RefundHeaderResponse mapRefundToHeaderResponse(Refund refund) {

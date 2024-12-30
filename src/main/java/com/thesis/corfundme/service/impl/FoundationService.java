@@ -24,7 +24,7 @@ public class FoundationService implements IFoundationService {
     return foundationRepository
       .findById(foundationId)
       .orElseThrow(() -> new RuntimeException(
-        "Cannot find foundation? This shouldn't happen though, if it does then me suck looool"));
+        "Cannot find foundation " + foundationId + "? This shouldn't happen though, if it does then me suck looool"));
   }
 
   @Override

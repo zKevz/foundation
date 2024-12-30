@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class ValidateUserResponse {
   private Integer userId;
+  private String username;
   private String accessToken;
   private String refreshToken;
 }

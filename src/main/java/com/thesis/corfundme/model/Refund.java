@@ -32,5 +32,8 @@ public class Refund extends BaseModel {
   private String reason;
 
   @Column
+  private String rejectReason;
+
+  @Column
   private RefundStatus status;
 }

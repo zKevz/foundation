@@ -1,6 +1,7 @@
 package com.thesis.corfundme.controller;
 
 import com.thesis.corfundme.model.User;
+import com.thesis.corfundme.request.RejectRefundRequest;
 import com.thesis.corfundme.request.RequestRefundRequest;
 import com.thesis.corfundme.response.BaseResponse;
 import com.thesis.corfundme.response.RefundDetailResponse;
@@ -53,7 +54,8 @@ public class RefundController {
 
   @GetMapping("/{refundId}")
   @PreAuthorize("hasRole('USER')")
-  public BaseResponse<RefundDetailResponse> getRefundDetail(@AuthenticationPrincipal User user, @PathVariable Integer refundId) {
+  public BaseResponse<RefundDetailResponse> getRefundDetail(@AuthenticationPrincipal User user,
+    @PathVariable Integer refundId) {
     try {
       return BaseResponse.ok(refundService.getRefundDetail(refundId, user));
     } catch (Exception e) {
@@ -76,9 +78,10 @@ public class RefundController {
 
   @PostMapping("/{refundId}/_reject")
   @PreAuthorize("hasRole('ADMIN')")
-  public BaseResponse<RefundDetailResponse> rejectRefund(@PathVariable Integer refundId) {
+  public BaseResponse<RefundDetailResponse> rejectRefund(@PathVariable Integer refundId,
+    @RequestBody RejectRefundRequest rejectRefundRequest) {
     try {
-      refundService.rejectRefund(refundId);
+      refundService.rejectRefund(refundId, rejectRefundRequest.getReason());
       return BaseResponse.ok(null);
     } catch (Exception e) {
       log.error("Reject refund error: {}", e.getMessage(), e);

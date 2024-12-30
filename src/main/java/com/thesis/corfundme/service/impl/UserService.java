@@ -111,7 +111,13 @@ public class UserService implements IUserService {
 
     saveToken(user, jwtToken);
 
-    return ValidateUserResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).userId(user.getId()).build();
+    return ValidateUserResponse
+      .builder()
+      .username(user.getName())
+      .accessToken(jwtToken)
+      .refreshToken(refreshToken)
+      .userId(user.getId())
+      .build();
   }
 
   private void validateUsername(String username) {
@@ -143,7 +149,13 @@ public class UserService implements IUserService {
 
     saveToken(user, jwtToken);
 
-    return ValidateUserResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).userId(user.getId()).build();
+    return ValidateUserResponse
+      .builder()
+      .username(user.getName())
+      .accessToken(jwtToken)
+      .refreshToken(refreshToken)
+      .userId(user.getId())
+      .build();
   }
 
   @Override
@@ -167,7 +179,13 @@ public class UserService implements IUserService {
 
     saveToken(user, jwtToken);
 
-    return ValidateUserResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).userId(user.getId()).build();
+    return ValidateUserResponse
+      .builder()
+      .username(user.getName())
+      .accessToken(jwtToken)
+      .refreshToken(refreshToken)
+      .userId(user.getId())
+      .build();
   }
 
   @Override

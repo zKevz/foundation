@@ -62,6 +62,7 @@ public class DonationService implements IDonationService {
       .name(donationActivity.getName())
       .amount(donationAllocationService.calculateAllocationAmountSum(donationActivity))
       .imageUrl(donationActivity.getImageUrl())
+      .disasterName(donationActivity.getDisasterName())
       .remainingDays(getRemainingDonationDays(donationActivity))
       .foundationName(foundation.getUser().getName())
       .allocatedAmount(donationAllocatedService.calculateAllocatedAmountSum(donationActivity))
@@ -195,6 +196,12 @@ public class DonationService implements IDonationService {
 
     if (Objects.nonNull(editDonationRequest.getShipmentStatus())) {
       donationActivity.setShipmentStatus(editDonationRequest.getShipmentStatus());
+
+      if (DonationShipmentStatus.ARRIVED.equals(editDonationRequest.getShipmentStatus())) {
+        donationActivity.setArrivedDate(new Date());
+      } else if (DonationShipmentStatus.ON_DELIVER.equals(editDonationRequest.getShipmentStatus())) {
+        donationActivity.setDeliveredDate(new Date());
+      }
     }
 
     if (Objects.nonNull(editDonationRequest.getAllocation())) {
@@ -203,10 +210,6 @@ public class DonationService implements IDonationService {
         donationAllocation.setAmount(donationAllocationItem.getAmount());
         donationAllocation.setDescription(donationAllocationItem.getDescription());
       }
-    }
-
-    if (Objects.nonNull(editDonationRequest.getArrivedDate())) {
-      donationActivity.setArrivedDate(editDonationRequest.getArrivedDate());
     }
   }
 

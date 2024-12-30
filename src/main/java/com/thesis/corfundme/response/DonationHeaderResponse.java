@@ -9,6 +9,7 @@ public class DonationHeaderResponse {
   private Integer id;
   private String name;
   private String imageUrl;
+  private String disasterName;
   private String foundationName;
   private Integer amount;
   private Integer allocatedAmount;

@@ -38,6 +38,7 @@ public class UserController {
   @PostMapping("/login")
   public BaseResponse<ValidateUserResponse> validateUser(@Valid @RequestBody ValidateUserRequest validateUserRequest) {
     try {
+      log.info("LOGIN! {} {}", validateUserRequest.getEmail(), validateUserRequest.getPassword());
       return BaseResponse.ok(userService.validateUser(validateUserRequest));
     } catch (Exception e) {
       log.error("Register user failed: {}", e.getMessage(), e);

@@ -1,5 +1,6 @@
 package com.thesis.corfundme.service;
 
+import com.thesis.corfundme.model.DonationAllocated;
 import com.thesis.corfundme.model.Refund;
 import com.thesis.corfundme.model.User;
 import com.thesis.corfundme.response.RefundDetailResponse;
@@ -12,7 +13,7 @@ public interface IRefundService {
 
   void approveRefund(Integer refundId);
 
-  void rejectRefund(Integer refundId);
+  void rejectRefund(Integer refundId, String reason);
 
   Refund findById(Integer refundId);
 

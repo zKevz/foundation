@@ -1,5 +1,6 @@
 package com.thesis.corfundme.response;
 
+import com.thesis.corfundme.model.DonationAllocatedStatus;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -13,5 +14,6 @@ public class DonationAllocatedHeaderResponse {
   private String imageUrl;
   private String foundationName;
   private Integer amount;
+  private DonationAllocatedStatus status;
   private Date date;
 }
