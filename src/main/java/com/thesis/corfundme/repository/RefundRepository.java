@@ -15,5 +15,5 @@ public interface RefundRepository extends JpaRepository<Refund, Integer> {
 
   Optional<Refund> findByDonationAllocated(DonationAllocated donationAllocated);
 
-  List<Refund> findByStatusAndStartDateBefore(RefundStatus status, LocalDateTime localDateTime);
+  List<Refund> findByStatusAndCreatedDateBefore(RefundStatus status, LocalDateTime localDateTime);
 }
