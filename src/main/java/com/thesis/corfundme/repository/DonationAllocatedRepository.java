@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DonationAllocatedRepository extends JpaRepository<DonationAllocated, Integer> {
-  List<DonationAllocated> findByDonationActivity(DonationActivity donationActivity);
+  List<DonationAllocated> findByDonationActivityAndDeletedFalse(DonationActivity donationActivity);
 
-  List<DonationAllocated> findByUser(User user);
-  Optional<DonationAllocated> findByUserAndId(User user, Integer id);
+  List<DonationAllocated> findByUserAndDeletedFalse(User user);
+  Optional<DonationAllocated> findByUserAndIdAndDeletedFalse(User user, Integer id);
 }

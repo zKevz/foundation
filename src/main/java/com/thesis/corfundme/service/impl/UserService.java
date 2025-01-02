@@ -98,6 +98,7 @@ public class UserService implements IUserService {
   public ValidateUserResponse registerUser(RegisterUserRequest registerUserRequest) {
     validateUsername(registerUserRequest.getUsername());
     validateEmailPassword(registerUserRequest.getEmail(), registerUserRequest.getPassword());
+    validateEmailUnique(registerUserRequest.getEmail());
 
     User user = userRepository.save(User
       .builder()
@@ -119,6 +120,12 @@ public class UserService implements IUserService {
       .refreshToken(refreshToken)
       .userId(user.getId())
       .build();
+  }
+
+  private void validateEmailUnique(String email) {
+    if (userRepository.existsByEmail(email)) {
+      throw new RuntimeException("Email is already used!");
+    }
   }
 
   private void validateUsername(String username) {

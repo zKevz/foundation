@@ -35,7 +35,7 @@ public class DonationAllocatedService implements IDonationAllocatedService {
   @Override
   public Integer calculateAllocatedAmountSum(DonationActivity donationActivity) {
     return donationAllocatedRepository
-      .findByDonationActivity(donationActivity)
+      .findByDonationActivityAndDeletedFalse(donationActivity)
       .stream()
       .map(DonationAllocated::getAmount)
       .reduce(0, Integer::sum);
@@ -57,19 +57,20 @@ public class DonationAllocatedService implements IDonationAllocatedService {
 
   @Override
   public List<DonationAllocatedHeaderResponse> getAllDonationAllocatedHeaders(User user) {
-    List<DonationAllocated> donationAllocatedList = donationAllocatedRepository.findByUser(user);
+    List<DonationAllocated> donationAllocatedList = donationAllocatedRepository.findByUserAndDeletedFalse(user);
     return donationAllocatedList.stream().map(this::mapDonationAllocatedToHeaderResponse).collect(Collectors.toList());
   }
 
   @Override
   public DonationAllocatedDetailResponse getDonationAllocatedDetail(Integer donationAllocatedId, User user) {
     DonationAllocated donationAllocated = donationAllocatedRepository
-      .findByUserAndId(user, donationAllocatedId)
+      .findByUserAndIdAndDeletedFalse(user, donationAllocatedId)
       .orElseThrow(() -> new RuntimeException(
         "Cannot find donation allocated by id " + donationAllocatedId + " and user id " + user.getId()));
 
     Optional<Refund> refund = refundRepository.findByDonationAllocated(donationAllocated);
-    Date shipmentDate = Optional.ofNullable(donationAllocated.getDonationActivity().getArrivedDate())
+    Date shipmentDate = Optional
+      .ofNullable(donationAllocated.getDonationActivity().getArrivedDate())
       .orElse(donationAllocated.getDonationActivity().getDeliveredDate());
 
     return DonationAllocatedDetailResponse

@@ -1,5 +1,6 @@
 package com.thesis.corfundme.service.impl;
 
+import com.thesis.corfundme.model.DonationActivity;
 import com.thesis.corfundme.model.DonationAllocated;
 import com.thesis.corfundme.model.Refund;
 import com.thesis.corfundme.model.RefundStatus;
@@ -14,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,10 +30,30 @@ public class RefundService implements IRefundService {
   @Autowired
   private RefundRepository refundRepository;
 
+  private static boolean hasDatePassedOneDay(Date donatedDate) {
+    LocalDate yesterdayDateLocal = LocalDate.now().minusDays(1);
+    LocalDate donatedDateLocal = donatedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    return donatedDateLocal.isBefore(yesterdayDateLocal);
+  }
+
+  private static boolean isDonationActivityEnding(DonationActivity donationActivity) {
+    LocalDateTime futureDateLocal = LocalDateTime.now().plusHours(12);
+    LocalDateTime endDateLocal =
+      donationActivity.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    return futureDateLocal.isAfter(endDateLocal);
+  }
+
   @Override
   @Transactional
   public void requestRefund(Integer donationAllocatedId, User user, String reason) {
     DonationAllocated donationAllocated = donationAllocatedService.findById(donationAllocatedId);
+    if (hasDatePassedOneDay(donationAllocated.getCreatedDate())
+      || isDonationActivityEnding(donationAllocated.getDonationActivity())) {
+      throw new RuntimeException("Refund hanya bisa dilakukan maksimal 1 (satu) hari setelah \n"
+        + "melakukan donasi atau apabila kurang dari satu hari maka terhitung\n"
+        + "maksimal 12 jam sebelum penutupan donasi.");
+    }
+
     Refund refund =
       Refund.builder().user(user).status(RefundStatus.OPEN).reason(reason).donationAllocated(donationAllocated).build();
     refundRepository.save(refund);
@@ -39,6 +64,9 @@ public class RefundService implements IRefundService {
   public void approveRefund(Integer refundId) {
     Refund refund = findById(refundId);
     refund.setStatus(RefundStatus.ACCEPTED);
+
+    DonationAllocated donationAllocated = refund.getDonationAllocated();
+    donationAllocated.setDeleted(true);
   }
 
   @Override
