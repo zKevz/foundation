@@ -21,7 +21,9 @@ public class ApplicationConfig {
 
   @Bean
   public UserDetailsService userDetailsService() {
-    return email -> userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Email or password not found"));
+    return email -> userRepository
+      .findByEmailAndDeletedFalse(email)
+      .orElseThrow(() -> new RuntimeException("Email or password not found"));
   }
 
   @Bean

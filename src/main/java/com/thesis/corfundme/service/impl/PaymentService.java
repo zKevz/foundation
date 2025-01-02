@@ -2,7 +2,6 @@ package com.thesis.corfundme.service.impl;
 
 import com.thesis.corfundme.model.DonationActivity;
 import com.thesis.corfundme.model.DonationAllocated;
-import com.thesis.corfundme.model.DonationAllocatedStatus;
 import com.thesis.corfundme.model.PaymentType;
 import com.thesis.corfundme.model.User;
 import com.thesis.corfundme.repository.DonationAllocatedRepository;
@@ -34,6 +33,10 @@ public class PaymentService implements IPaymentService {
   @Override
   @Transactional
   public void pay(Integer donationId, User user, DonationPayRequest donationPayRequest) {
+    if (donationPayRequest.getAmount() <= 0) {
+      throw new RuntimeException("Amount cannot be less than 1.");
+    }
+
     DonationActivity donationActivity = donationService.findById(donationId);
     DonationAllocated donationAllocated = DonationAllocated
       .builder()
@@ -41,7 +44,6 @@ public class PaymentService implements IPaymentService {
       .donationActivity(donationActivity)
       .amount(donationPayRequest.getAmount())
       .paymentType(PaymentType.valueOf(donationPayRequest.getPaymentType()))
-      .status(DonationAllocatedStatus.SUCCESS)
       .build();
     donationAllocatedRepository.save(donationAllocated);
   }

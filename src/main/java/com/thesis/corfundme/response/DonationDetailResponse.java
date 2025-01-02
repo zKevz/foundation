@@ -13,6 +13,8 @@ public class DonationDetailResponse {
   private String imageUrl;
   private String description;
   private String foundationName;
+  private String foundationEmail;
+  private String foundationAddress;
   private Integer amount;
   private Integer allocatedAmount;
   private Long remainingDays;

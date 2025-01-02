@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,6 +54,17 @@ public class UserController {
       return BaseResponse.ok(userService.editUser(user, editUserRequest));
     } catch (Exception e) {
       log.error("Register user failed: {}", e.getMessage(), e);
+      return BaseResponse.error(e.getMessage());
+    }
+  }
+
+  @DeleteMapping("/delete")
+  public BaseResponse<Object> deleteUser(@AuthenticationPrincipal User user) {
+    try {
+      userService.deleteUser(user);
+      return BaseResponse.ok(null);
+    } catch (Exception e) {
+      log.error("Delete user failed: {}", e.getMessage(), e);
       return BaseResponse.error(e.getMessage());
     }
   }

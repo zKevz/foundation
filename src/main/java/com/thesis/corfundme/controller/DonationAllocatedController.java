@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/donation-allocated")
+@RequestMapping("/api/v1/donations/allocated")
 public class DonationAllocatedController {
   @Autowired
   private IDonationAllocatedService donationAllocatedService;

@@ -33,7 +33,4 @@ public class DonationAllocated extends BaseModel {
 
   @Column
   private PaymentType paymentType;
-
-  @Column
-  private DonationAllocatedStatus status;
 }

@@ -37,6 +37,9 @@ public class User extends BaseModel implements UserDetails {
   @Column
   private UserRole role;
 
+  @Column(nullable = false)
+  private boolean deleted = false;
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return role.getAuthorities();

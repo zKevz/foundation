@@ -14,6 +14,7 @@ import com.thesis.corfundme.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -140,7 +141,7 @@ public class UserService implements IUserService {
       validateUserRequest.getPassword()));
 
     User user = userRepository
-      .findByEmail(validateUserRequest.getEmail())
+      .findByEmailAndDeletedFalse(validateUserRequest.getEmail())
       .orElseThrow(() -> new RuntimeException("Invalid email or password"));
     String jwtToken = jwtService.generateToken(user);
     String refreshToken = jwtService.generateRefreshToken(user);
@@ -203,5 +204,12 @@ public class UserService implements IUserService {
   @Override
   public boolean containsRole(UserRole userRole) {
     return userRepository.existsByRole(userRole);
+  }
+
+  @Override
+  @Transactional
+  public void deleteUser(User userDetails) {
+    User user = findById(userDetails.getId());
+    user.setDeleted(true);
   }
 }

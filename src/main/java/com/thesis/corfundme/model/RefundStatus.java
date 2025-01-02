@@ -1,5 +1,16 @@
 package com.thesis.corfundme.model;
 
+import lombok.Getter;
+
+@Getter
 public enum RefundStatus {
-  OPEN, ACCEPTED, REJECTED
+  OPEN("Proses Pengajuan Pengembalian Dana"),
+  ACCEPTED("Pengembalian Dana Diterima"),
+  REJECTED("Penolakan Pengembalian Dana");
+
+  private final String value;
+
+  RefundStatus(String value) {
+    this.value = value;
+  }
 }

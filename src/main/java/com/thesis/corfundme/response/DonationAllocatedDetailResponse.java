@@ -1,9 +1,5 @@
 package com.thesis.corfundme.response;
 
-import com.thesis.corfundme.model.DonationAllocatedStatus;
-import com.thesis.corfundme.model.DonationShipmentStatus;
-import com.thesis.corfundme.model.DonationStatus;
-import com.thesis.corfundme.model.RefundStatus;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -20,10 +16,9 @@ public class DonationAllocatedDetailResponse {
   private String proofImageUrl;
   private String foundationName;
   private String refundRejectReason;
-  private RefundStatus refundStatus;
-  private DonationStatus activityStatus;
-  private DonationShipmentStatus shipmentStatus;
-  private DonationAllocatedStatus allocatedStatus;
+  private String refundStatus;
+  private String activityStatus;
+  private String shipmentStatus;
   private Date date;
   private Date shipmentDate;
 }

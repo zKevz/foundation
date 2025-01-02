@@ -80,6 +80,8 @@ public class DonationService implements IDonationService {
       .description(donationActivity.getDisasterDescription())
       .remainingDays(getRemainingDonationDays(donationActivity))
       .foundationName(foundation.getUser().getName())
+      .foundationEmail(foundation.getUser().getEmail())
+      .foundationAddress(foundation.getAddress())
       .allocatedAmount(donationAllocatedService.calculateAllocatedAmountSum(donationActivity))
       .dateArrived(donationActivity.getArrivedDate())
       .build();

@@ -9,7 +9,9 @@ import com.thesis.corfundme.response.ValidateUserResponse;
 
 public interface IUserService {
   ValidateUserResponse registerUser(RegisterUserRequest registerUserRequest);
+
   ValidateUserResponse validateUser(ValidateUserRequest validateUserRequest);
+
   ValidateUserResponse editUser(User user, EditUserRequest editUserRequest);
 
   User findById(Integer userId);
@@ -17,4 +19,6 @@ public interface IUserService {
   void changeUserRole(Integer userId, UserRole userRole);
 
   boolean containsRole(UserRole userRole);
+
+  void deleteUser(User user);
 }

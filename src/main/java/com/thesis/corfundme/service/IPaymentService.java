@@ -6,7 +6,7 @@ import com.thesis.corfundme.request.DonationPayRequest;
 import java.util.List;
 
 public interface IPaymentService {
-  public List<String> getPaymentTypes();
+  List<String> getPaymentTypes();
 
   void pay(Integer donationId, User user, DonationPayRequest donationPayRequest);
 }

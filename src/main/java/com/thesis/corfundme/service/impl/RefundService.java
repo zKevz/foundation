@@ -1,7 +1,6 @@
 package com.thesis.corfundme.service.impl;
 
 import com.thesis.corfundme.model.DonationAllocated;
-import com.thesis.corfundme.model.DonationAllocatedStatus;
 import com.thesis.corfundme.model.Refund;
 import com.thesis.corfundme.model.RefundStatus;
 import com.thesis.corfundme.model.User;
@@ -30,8 +29,6 @@ public class RefundService implements IRefundService {
   @Transactional
   public void requestRefund(Integer donationAllocatedId, User user, String reason) {
     DonationAllocated donationAllocated = donationAllocatedService.findById(donationAllocatedId);
-    donationAllocated.setStatus(DonationAllocatedStatus.WAITING_FOR_REFUND_APPROVAL);
-
     Refund refund =
       Refund.builder().user(user).status(RefundStatus.OPEN).reason(reason).donationAllocated(donationAllocated).build();
     refundRepository.save(refund);
