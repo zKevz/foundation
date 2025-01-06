@@ -16,9 +16,11 @@ import com.thesis.corfundme.service.IDonationAllocatedService;
 import com.thesis.corfundme.service.IDonationAllocationService;
 import com.thesis.corfundme.service.IDonationService;
 import com.thesis.corfundme.service.IFoundationService;
+import com.thesis.corfundme.service.IStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -45,6 +47,9 @@ public class DonationService implements IDonationService {
 
   @Autowired
   private IDonationAllocationService donationAllocationService;
+
+  @Autowired
+  private IStorageService storageService;
 
   @Override
   public Long getRemainingDonationDays(DonationActivity donationActivity) {
@@ -111,7 +116,6 @@ public class DonationService implements IDonationService {
     DonationActivity donationActivity = DonationActivity
       .builder()
       .name(createDonationRequest.getName())
-      .imageUrl(createDonationRequest.getImageUrl())
       .disasterDescription(createDonationRequest.getDescription())
       .foundation(foundationService.findById(foundationId))
       .status(DonationStatus.OPEN)
@@ -174,14 +178,6 @@ public class DonationService implements IDonationService {
       donationActivity.setEndDate(editDonationRequest.getEndDate());
     }
 
-    if (Objects.nonNull(editDonationRequest.getImageUrl())) {
-      donationActivity.setImageUrl(editDonationRequest.getImageUrl());
-    }
-
-    if (Objects.nonNull(editDonationRequest.getImageProofUrl())) {
-      donationActivity.setImageProofUrl(editDonationRequest.getImageProofUrl());
-    }
-
     if (Objects.nonNull(editDonationRequest.getDisasterDescription())) {
       donationActivity.setDisasterDescription(editDonationRequest.getDisasterDescription());
     }
@@ -207,6 +203,30 @@ public class DonationService implements IDonationService {
         donationAllocation.setDescription(donationAllocationItem.getDescription());
       }
     }
+  }
+
+  private void uploadImage(DonationActivity donationActivity, String filename, MultipartFile file) {
+  }
+
+  @Override
+  @Transactional
+  public void uploadImage(Integer donationId, MultipartFile file) {
+    DonationActivity donationActivity = findById(donationId);
+    storageService.store(donationActivity.getId().toString(), file);
+    donationActivity.setImageUrl(
+      "http://localhost:8080/api/v1/donations/" + donationActivity.getId() + "/image/" + donationActivity.getId()
+        + storageService.getFileExtension(file.getOriginalFilename()));
+  }
+
+  @Override
+  @Transactional
+  public void uploadImageProof(Integer donationId, MultipartFile file) {
+    DonationActivity donationActivity = findById(donationId);
+    String filename = donationActivity.getId() + "_proof";
+    storageService.store(filename, file);
+    donationActivity.setImageProofUrl(
+      "http://localhost:8080/api/v1/donations/" + donationActivity.getId() + "/image/" + filename
+        + storageService.getFileExtension(file.getOriginalFilename()));
   }
 
   @Override

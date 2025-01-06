@@ -11,8 +11,6 @@ import java.util.List;
 public class EditDonationRequest {
   private String name;
   private Date endDate;
-  private String imageUrl;
-  private String imageProofUrl;
   private String disasterDescription;
   private DonationStatus status;
   private DonationShipmentStatus shipmentStatus;

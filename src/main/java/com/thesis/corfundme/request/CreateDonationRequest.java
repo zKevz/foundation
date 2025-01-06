@@ -8,7 +8,6 @@ import java.util.List;
 @Data
 public class CreateDonationRequest {
   private String name;
-  private String imageUrl;
   private String description;
   private Long endDateUnixTimestamp;
   private List<DonationAllocationItem> allocation;

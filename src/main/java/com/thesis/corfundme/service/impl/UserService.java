@@ -173,12 +173,20 @@ public class UserService implements IUserService {
     validateEmailPassword(editUserRequest.getEmail(), editUserRequest.getPassword());
 
     User user = findById(userDetails.getId());
-    user.setEmail(editUserRequest.getEmail());
-    user.setName(editUserRequest.getUsername());
-    user.setPassword(passwordEncoder.encode(editUserRequest.getPassword()));
-    userDetails.setEmail(editUserRequest.getEmail());
-    userDetails.setName(editUserRequest.getUsername());
-    userDetails.setPassword(passwordEncoder.encode(editUserRequest.getPassword()));
+    if (Objects.nonNull(editUserRequest.getEmail())) {
+      user.setEmail(editUserRequest.getEmail());
+      userDetails.setEmail(editUserRequest.getEmail());
+    }
+
+    if (Objects.nonNull(editUserRequest.getUsername())) {
+      user.setName(editUserRequest.getUsername());
+      userDetails.setName(editUserRequest.getUsername());
+    }
+
+    if (Objects.nonNull(editUserRequest.getPassword())) {
+      user.setPassword(passwordEncoder.encode(editUserRequest.getPassword()));
+      userDetails.setPassword(passwordEncoder.encode(editUserRequest.getPassword()));
+    }
 
     String jwtToken = jwtService.generateToken(user);
     String refreshToken = jwtService.generateRefreshToken(user);

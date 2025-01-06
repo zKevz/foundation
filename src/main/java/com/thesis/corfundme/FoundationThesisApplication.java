@@ -1,5 +1,6 @@
 package com.thesis.corfundme;
 
+import com.thesis.corfundme.config.StorageConfig;
 import com.thesis.corfundme.model.UserRole;
 import com.thesis.corfundme.request.CreateFoundationRequest;
 import com.thesis.corfundme.request.RegisterUserRequest;
@@ -11,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Slf4j
 @EnableScheduling
 @SpringBootApplication
+@EnableConfigurationProperties(StorageConfig.class)
 public class FoundationThesisApplication {
   @Autowired
   private IUserService userService;

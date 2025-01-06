@@ -6,6 +6,7 @@ import com.thesis.corfundme.request.EditDonationRequest;
 import com.thesis.corfundme.response.DonationAllocationDetailResponse;
 import com.thesis.corfundme.response.DonationDetailResponse;
 import com.thesis.corfundme.response.DonationHeaderResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,4 +24,7 @@ public interface IDonationService {
   DonationAllocationDetailResponse getAllocationDetail(Integer donationId);
 
   void editDonation(Integer donationId, EditDonationRequest editDonationRequest);
+
+  void uploadImage(Integer donationId, MultipartFile file);
+  void uploadImageProof(Integer donationId, MultipartFile file);
 }
