@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -35,6 +37,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
     if (whiteListRoutes.contains(request.getServletPath())) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
+    if (request.getServletPath().startsWith("/api/v1/donations/image")) {
       filterChain.doFilter(request, response);
       return;
     }

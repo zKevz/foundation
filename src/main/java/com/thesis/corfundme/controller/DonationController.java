@@ -132,10 +132,10 @@ public class DonationController {
     }
   }
 
-  @GetMapping(value = "/{donationId}/image/{filename:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-  @PreAuthorize("hasRole('USER') or hasRole('FOUNDATION')")
+  @GetMapping(value = "/image/{filename:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
   @ResponseBody
-  public ResponseEntity<Resource> getDonationImage(@PathVariable Integer donationId, @PathVariable String filename) {
+  public ResponseEntity<Resource> getDonationImage(@PathVariable String filename) {
+    log.info("bruh!?");
     Resource file = storageService.load(filename);
     if (file == null) {
       return ResponseEntity.notFound().build();

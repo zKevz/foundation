@@ -205,17 +205,13 @@ public class DonationService implements IDonationService {
     }
   }
 
-  private void uploadImage(DonationActivity donationActivity, String filename, MultipartFile file) {
-  }
-
   @Override
   @Transactional
   public void uploadImage(Integer donationId, MultipartFile file) {
     DonationActivity donationActivity = findById(donationId);
     storageService.store(donationActivity.getId().toString(), file);
-    donationActivity.setImageUrl(
-      "http://localhost:8080/api/v1/donations/" + donationActivity.getId() + "/image/" + donationActivity.getId()
-        + storageService.getFileExtension(file.getOriginalFilename()));
+    donationActivity.setImageUrl("http://localhost:8080/api/v1/donations/image/" + donationActivity.getId()
+      + storageService.getFileExtension(file.getOriginalFilename()));
   }
 
   @Override
@@ -224,9 +220,8 @@ public class DonationService implements IDonationService {
     DonationActivity donationActivity = findById(donationId);
     String filename = donationActivity.getId() + "_proof";
     storageService.store(filename, file);
-    donationActivity.setImageProofUrl(
-      "http://localhost:8080/api/v1/donations/" + donationActivity.getId() + "/image/" + filename
-        + storageService.getFileExtension(file.getOriginalFilename()));
+    donationActivity.setImageProofUrl("http://localhost:8080/api/v1/donations/image/" + filename
+      + storageService.getFileExtension(file.getOriginalFilename()));
   }
 
   @Override

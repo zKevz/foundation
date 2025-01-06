@@ -14,7 +14,6 @@ import com.thesis.corfundme.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -173,20 +172,13 @@ public class UserService implements IUserService {
     validateEmailPassword(editUserRequest.getEmail(), editUserRequest.getPassword());
 
     User user = findById(userDetails.getId());
-    if (Objects.nonNull(editUserRequest.getEmail())) {
-      user.setEmail(editUserRequest.getEmail());
-      userDetails.setEmail(editUserRequest.getEmail());
-    }
+    user.setName(editUserRequest.getUsername());
+    user.setEmail(editUserRequest.getEmail());
+    user.setPassword(passwordEncoder.encode(editUserRequest.getPassword()));
 
-    if (Objects.nonNull(editUserRequest.getUsername())) {
-      user.setName(editUserRequest.getUsername());
-      userDetails.setName(editUserRequest.getUsername());
-    }
-
-    if (Objects.nonNull(editUserRequest.getPassword())) {
-      user.setPassword(passwordEncoder.encode(editUserRequest.getPassword()));
-      userDetails.setPassword(passwordEncoder.encode(editUserRequest.getPassword()));
-    }
+    userDetails.setName(editUserRequest.getUsername());
+    userDetails.setEmail(editUserRequest.getEmail());
+    userDetails.setPassword(passwordEncoder.encode(editUserRequest.getPassword()));
 
     String jwtToken = jwtService.generateToken(user);
     String refreshToken = jwtService.generateRefreshToken(user);
