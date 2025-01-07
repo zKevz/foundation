@@ -29,4 +29,7 @@ public class DonationAllocation extends BaseModel {
 
   @Column
   private Integer amount;
+
+  @Column(nullable = false, columnDefinition = "boolean default false")
+  private boolean deleted;
 }

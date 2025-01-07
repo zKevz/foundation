@@ -15,7 +15,7 @@ public class DonationAllocationService implements IDonationAllocationService {
   @Override
   public Integer calculateAllocationAmountSum(DonationActivity donationActivity) {
     return donationAllocationRepository
-      .findByDonationActivity(donationActivity)
+      .findByDonationActivityAndDeletedFalse(donationActivity)
       .stream()
       .map(DonationAllocation::getAmount)
       .reduce(0, Integer::sum);

@@ -40,7 +40,7 @@ public class DonationActivity extends BaseModel {
   @Column
   private String imageProofUrl;
 
-  @Column
+  @Column(length = 4096)
   private String disasterDescription;
 
   @ManyToOne(fetch = FetchType.LAZY)

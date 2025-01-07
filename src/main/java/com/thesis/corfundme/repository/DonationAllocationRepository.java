@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface DonationAllocationRepository extends JpaRepository<DonationAllocation, Integer> {
-  List<DonationAllocation> findByDonationActivity(DonationActivity donationActivity);
+  List<DonationAllocation> findByDonationActivityAndDeletedFalse(DonationActivity donationActivity);
 }

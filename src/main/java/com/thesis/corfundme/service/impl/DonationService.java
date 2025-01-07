@@ -147,7 +147,7 @@ public class DonationService implements IDonationService {
   public DonationAllocationDetailResponse getAllocationDetail(Integer donationId) {
     DonationActivity donationActivity = findById(donationId);
     List<DonationAllocation> donationAllocations =
-      donationAllocationRepository.findByDonationActivity(donationActivity);
+      donationAllocationRepository.findByDonationActivityAndDeletedFalse(donationActivity);
     List<DonationAllocationDetailResponse.DonationAllocationDetailItemResponse> donationAllocationItems =
       donationAllocations
         .stream()
@@ -222,6 +222,28 @@ public class DonationService implements IDonationService {
     storageService.store(filename, file);
     donationActivity.setImageProofUrl("http://localhost:8080/api/v1/donations/image/" + filename
       + storageService.getFileExtension(file.getOriginalFilename()));
+  }
+
+  @Override
+  @Transactional
+  public void addDonationAllocation(Integer donationId,
+    CreateDonationRequest.DonationAllocationItem addDonationAllocationRequest) {
+    DonationActivity donationActivity = findById(donationId);
+    DonationAllocation donationAllocation = DonationAllocation
+      .builder()
+      .donationActivity(donationActivity)
+      .description(addDonationAllocationRequest.getDescription())
+      .amount(addDonationAllocationRequest.getAmount())
+      .build();
+    donationAllocationRepository.save(donationAllocation);
+  }
+
+  @Override
+  @Transactional
+  public void removeDonationAllocation(Integer donationId, Integer allocationId) {
+    DonationActivity donationActivity = findById(donationId);
+    DonationAllocation donationAllocation = donationAllocationService.findById(allocationId);
+    donationAllocation.setDeleted(true);
   }
 
   @Override

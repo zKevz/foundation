@@ -1,0 +1,128 @@
+@startuml
+
+class com.thesis.corfundme.service.impl.JwtService {
+- String secretKey
+- long jwtExpiration
+- long refreshExpiration
+- TokenRepository tokenRepository
++ String extractUsername(String)
++ T extractClaim(String,Function<Claims,T>)
++ String generateToken(UserDetails)
++ String generateToken(Map<String,Object>,UserDetails)
++ String generateRefreshToken(UserDetails)
++ String buildToken(Map<String,Object>,UserDetails,long)
++ boolean isTokenValid(String,UserDetails)
+- boolean isTokenExpired(String)
+- Date extractExpiration(String)
+- Claims extractAllClaims(String)
+- Key getSignInKey()
++ void expireOrRevokeTokenByUser(User)
+}
+
+
+class com.thesis.corfundme.service.impl.FoundationService {
+- FoundationRepository foundationRepository
+- IUserService userService
++ Foundation findById(Integer)
++ CreateFoundationResponse createFoundation(Integer,CreateFoundationRequest)
+}
+
+class com.thesis.corfundme.service.impl.RefundService {
+- IDonationAllocatedService donationAllocatedService
+- RefundRepository refundRepository
+- {static} boolean hasDatePassedOneDay(Date)
+- {static} boolean isDonationActivityEnding(DonationActivity)
++ void requestRefund(Integer,User,String)
++ void approveRefund(Integer)
++ void rejectRefund(Integer,String)
+- RefundHeaderResponse mapRefundToHeaderResponse(Refund)
+- RefundDetailResponse mapRefundToDetailResponse(Refund)
++ Refund findById(Integer)
++ List<RefundHeaderResponse> getRefunds(User)
++ RefundDetailResponse getRefundDetail(Integer,User)
+}
+
+
+class com.thesis.corfundme.service.impl.LogoutService {
+- TokenRepository tokenRepository
++ void logout(HttpServletRequest,HttpServletResponse,Authentication)
+}
+
+class com.thesis.corfundme.service.impl.DonationService {
+- DonationRepository donationRepository
+- IFoundationService foundationService
+- DonationAllocationRepository donationAllocationRepository
+- IDonationAllocatedService donationAllocatedService
+- IDonationAllocationService donationAllocationService
+- IStorageService storageService
++ Long getRemainingDonationDays(DonationActivity)
+- DonationHeaderResponse mapDonationActivityToHeaderResponse(DonationActivity)
+- DonationDetailResponse mapDonationActivityToDetailResponse(DonationActivity)
++ List<DonationHeaderResponse> getNewestDonations()
++ List<DonationHeaderResponse> getAll()
++ void create(Integer,CreateDonationRequest)
++ DonationDetailResponse getDetail(Integer)
++ DonationAllocationDetailResponse getAllocationDetail(Integer)
++ void editDonation(Integer,EditDonationRequest)
++ void uploadImage(Integer,MultipartFile)
++ void uploadImageProof(Integer,MultipartFile)
++ DonationActivity findById(Integer)
+}
+
+class com.thesis.corfundme.service.impl.StorageService {
+- Path rootPath
++ void store(String,MultipartFile)
++ Resource load(String)
++ String getFileExtension(String)
+}
+
+class com.thesis.corfundme.service.impl.PaymentService {
+- IDonationService donationService
+- DonationAllocatedRepository donationAllocatedRepository
++ List<String> getPaymentTypes()
++ void pay(Integer,User,DonationPayRequest)
+}
+
+class com.thesis.corfundme.service.impl.UserService {
+- UserRepository userRepository
+- IJwtService jwtService
+- TokenRepository tokenRepository
+- AuthenticationManager authenticationManager
+- PasswordEncoder passwordEncoder
+- boolean isValidUsername(String)
+- boolean isValidPassword(String)
+- boolean isValidEmail(String)
+- void validateEmailPassword(String,String)
++ ValidateUserResponse registerUser(RegisterUserRequest)
+- void validateEmailUnique(String)
+- void validateUsername(String)
+- void saveToken(User,String)
++ ValidateUserResponse validateUser(ValidateUserRequest)
++ ValidateUserResponse editUser(User,EditUserRequest)
++ User findById(Integer)
++ void changeUserRole(Integer,UserRole)
++ boolean containsRole(UserRole)
++ void deleteUser(User)
+}
+
+class com.thesis.corfundme.service.impl.DonationAllocationService {
+- DonationAllocationRepository donationAllocationRepository
++ Integer calculateAllocationAmountSum(DonationActivity)
++ DonationAllocation findById(Integer)
+}
+
+
+class com.thesis.corfundme.service.impl.DonationAllocatedService {
+- DonationAllocatedRepository donationAllocatedRepository
+- IDonationService donationService
+- RefundRepository refundRepository
++ Integer calculateAllocatedAmountSum(DonationActivity)
+- DonationAllocatedHeaderResponse mapDonationAllocatedToHeaderResponse(DonationAllocated)
++ List<DonationAllocatedHeaderResponse> getAllDonationAllocatedHeaders(User)
++ DonationAllocatedDetailResponse getDonationAllocatedDetail(Integer,User)
++ DonationAllocated findById(Integer)
+}
+
+
+
+@enduml

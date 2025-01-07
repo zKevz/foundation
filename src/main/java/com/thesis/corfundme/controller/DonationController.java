@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -135,7 +136,6 @@ public class DonationController {
   @GetMapping(value = "/image/{filename:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
   @ResponseBody
   public ResponseEntity<Resource> getDonationImage(@PathVariable String filename) {
-    log.info("bruh!?");
     Resource file = storageService.load(filename);
     if (file == null) {
       return ResponseEntity.notFound().build();
@@ -146,5 +146,31 @@ public class DonationController {
       .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
       .contentType(MediaType.IMAGE_PNG)
       .body(file);
+  }
+
+  @PostMapping("/{donationId}/allocation")
+  @PreAuthorize("hasRole('FOUNDATION')")
+  public BaseResponse<?> addDonationAllocation(@PathVariable Integer donationId,
+    @RequestBody CreateDonationRequest.DonationAllocationItem addDonationAllocationRequest) {
+    try {
+      donationService.addDonationAllocation(donationId, addDonationAllocationRequest);
+      return BaseResponse.ok(null);
+    } catch (Exception e) {
+      log.error("Upload donation image proof error: {}", e.getMessage(), e);
+      return BaseResponse.error(e.getMessage());
+    }
+  }
+
+  @DeleteMapping("/{donationId}/allocation/{allocationId}")
+  @PreAuthorize("hasRole('FOUNDATION')")
+  public BaseResponse<?> removeDonationAllocation(@PathVariable Integer donationId,
+    @PathVariable Integer allocationId) {
+    try {
+      donationService.removeDonationAllocation(donationId, allocationId);
+      return BaseResponse.ok(null);
+    } catch (Exception e) {
+      log.error("Upload donation image proof error: {}", e.getMessage(), e);
+      return BaseResponse.error(e.getMessage());
+    }
   }
 }

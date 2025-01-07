@@ -27,4 +27,8 @@ public interface IDonationService {
 
   void uploadImage(Integer donationId, MultipartFile file);
   void uploadImageProof(Integer donationId, MultipartFile file);
+
+  void addDonationAllocation(Integer donationId, CreateDonationRequest.DonationAllocationItem addDonationAllocationRequest);
+
+  void removeDonationAllocation(Integer donationId, Integer allocationId);
 }
