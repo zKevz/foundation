@@ -44,7 +44,7 @@ public class UserService implements IUserService {
 
     username = username.trim();
 
-    return username.length() >= 3 && username.length() <= 17;
+    return username.length() >= 3 && username.length() <= 20;
   }
 
   private boolean isValidPassword(String password) {
